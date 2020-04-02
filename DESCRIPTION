@@ -15,4 +15,5 @@ Imports:
     ggplot2 (>= 3.3.0),
     rlang (>= 0.4.5),
     tibble (>= 3.0.0),
-    tidyr (>= 1.0.2)
+    tidyr (>= 1.0.2),
+    TidyWrappers (>= 0.0.1.9)
