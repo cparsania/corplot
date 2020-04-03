@@ -75,6 +75,8 @@ groups <- readr::read_delim(file = groups_file,delim = "\t")
 
 csp <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var_plot = condition, var_plot_group = repl,dat_id = gene_name)
 
+print(csp )
+
 cor_tbl2 <- cor_tbl %>% dplyr::rename(`Rep.A`=var1, `Rep.B` = var2) %>% 
   dplyr::filter(grepl("Rep.A" ,`Rep.A`)) %>%
   dplyr::filter(grepl("Rep.B" ,`Rep.B`)) %>% 
@@ -82,8 +84,6 @@ cor_tbl2 <- cor_tbl %>% dplyr::rename(`Rep.A`=var1, `Rep.B` = var2) %>%
 
 csp + ggplot2::geom_text(data = cor_tbl2,  x = 3, y = 18, ggplot2::aes(label = paste("r","=",corr , sep = "")) , 
                          fontface="italic" , col = "red")
-
-
 
 
 ## add corr values 
