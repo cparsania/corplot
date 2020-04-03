@@ -80,7 +80,7 @@ csp
 cor_tbl2 <- cor_tbl %>% dplyr::rename(`Rep.A`=var1, `Rep.B` = var2) %>% 
   dplyr::filter(grepl("Rep.A" ,`Rep.A`)) %>%
   dplyr::filter(grepl("Rep.B" ,`Rep.B`)) %>% 
-  TidyWrappers::tbl_replace_string("_*" , "")
+  TidyWrappers::tbl_replace_string("_.*" , "")
 
 csp + ggplot2::geom_text(data = cor_tbl2,  x = 3, y = 18, ggplot2::aes(label = paste("r","=",corr , sep = "")) , 
                          fontface="italic" , col = "red")
