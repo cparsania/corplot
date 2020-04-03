@@ -1,17 +1,4 @@
-## Corr heatbox between sample pairs. samples must not repeat on any axis
 
-
-
-# dat <- tibble::tribble(
-#   ~genes, ~cg_xbp1_thp1_0h_polII_set1, ~cg_xbp1_thp1_2h_polII_set1, ~cg_xbp1_thp1_4h_polII_set1, ~cg_xbp1_thp1_6h_polII_set1, ~cg_xbp1_thp1_8h_polII_set1, ~cg_xbp1_thp1_0h_polII_set2, ~cg_xbp1_thp1_2h_polII_set2, ~cg_xbp1_thp1_4h_polII_set2, ~cg_xbp1_thp1_6h_polII_set2, ~cg_xbp1_thp1_8h_polII_set2,
-#   "CAGL0A00105g",                 5.590530589,                 6.243382014,                 6.749620899,                 7.825111755,                 6.100145757,                 4.174793084,                  10.1650902,                 5.481785315,                 4.770598636,                 6.965798885,
-#   "CAGL0A00110g",                  12.8425952,                 18.20034983,                 21.81659112,                 24.64828544,                 22.75378761,                 12.49357126,                 21.87086403,                 22.11528107,                 16.57443902,                 24.65169314,
-#   "CAGL0A00116g",                 16.30495365,                 23.75513046,                 28.96951606,                 32.50976156,                 30.71185412,                 16.44640396,                 27.37725284,                 29.98144642,                 22.22565767,                 33.10066498,
-#   "CAGL0A00132g",                 4.637555142,                 5.409842409,                 5.961671818,                 7.792807562,                 5.484018909,                 3.124362835,                 6.586119741,                 8.801859174,                 4.785924245,                 3.313132577,
-#   "CAGL0A00154g",                 7.964959452,                 4.557837917,                 6.438378282,                 4.882072028,                 5.389297234,                 10.55931086,                 8.605121592,                 4.559572162,                    4.297054,                 1.986698259,
-#   "CAGL0A00165g",                 8.868599914,                 7.537428691,                 9.537553437,                 8.350892851,                 9.118221384,                 10.19861793,                 7.937707141,                 10.97718701,                 8.644499961,                 5.756728672
-# )
-#
 
 
 
@@ -30,7 +17,7 @@
 #' @importFrom tibble column_to_rownames rownames_to_column as_tibble
 #' @importFrom tidyr gather
 #' @importFrom rlang enquo
-#' @importFrom ggplot2 ggplot geom_tile geom_label
+#' @importFrom ggplot2 ggplot geom_tile geom_label theme_bw theme
 #'
 get_pairwise_cor_tbl <- function(dat , var = "genes", transform = TRUE, method = "pearson"){
 
@@ -86,7 +73,9 @@ get_corr_heat_box <- function(pairwise_cor_tbl , var1, var2, value ){
   gp <- pairwise_cor_tbl %>%
     ggplot2::ggplot() +
     ggplot2::geom_tile(aes(x = !!var1, y = !!var2 , fill = !!value)) +
-    ggplot2::geom_label(aes(x = !!var1, y = !!var2 , label = !!value))
+    ggplot2::geom_label(aes(x = !!var1, y = !!var2 , label = !!value)) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(axis.text.x = element_text(angle = 90))
   return(gp)
 
 }

@@ -1,0 +1,9 @@
+samples	condition	repl
+Control_Rep.A	Control	Rep.A
+Control_Rep.B	Control	Rep.B
+Treat1_Rep.A	Treat1	Rep.A
+Treat1_Rep.B	Treat1	Rep.B
+Treat2_Rep.A	Treat2	Rep.A
+Treat2_Rep.B	Treat2	Rep.B
+Treat3_Rep.A	Treat3	Rep.A
+Treat3_Rep.B	Treat3	Rep.B

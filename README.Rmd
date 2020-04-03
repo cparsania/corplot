@@ -1,73 +1,76 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+```{r , message=FALSE, echo=FALSE}
+library(magrittr)
+```
 # corplot
 
 <!-- badges: start -->
 
+```{r , echo=FALSE , results='asis' , message=FALSE}
+cat(
+#badger::badge_devel("cparsania/corplot" , color = "blue"),
+#badger::badge_lifecycle()
+)
+
+```
 <!-- badges: end -->
 
-## Install
+## Install 
 
-``` r
+```{r , eval=FALSE}
 if(require("devtools")){
         devtools::install_github("cparsania/corplot")
 } else{
         install.packages("devtools")
         devtools::install_github("cparsania/corplot")
 }
+
 ```
 
-## Correlation heatbox
+## Correlation heatbox 
 
 ## all vs all
 
-``` r
+``` {r}
 
 expr_mat_file <- system.file("extdata" ,"example_data_expr_mat_01.txt" , package = "corplot")
 expr_mat <- readr::read_delim(expr_mat_file , delim = "\t") 
-#> Parsed with column specification:
-#> cols(
-#>   gene_name = col_character(),
-#>   Control_Rep.A = col_double(),
-#>   Control_Rep.B = col_double(),
-#>   Treat1_Rep.A = col_double(),
-#>   Treat1_Rep.B = col_double(),
-#>   Treat2_Rep.A = col_double(),
-#>   Treat2_Rep.B = col_double(),
-#>   Treat3_Rep.A = col_double(),
-#>   Treat3_Rep.B = col_double()
-#> )
 cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name")
 
 cp <- corplot::get_corr_heat_box(cor_tbl,var1 = var1, var2 = var2 ,value = corr) 
 cp + viridis::scale_fill_viridis() + ggplot2::theme(axis.text.x = ggplot2::element_text(angle=90))
-```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+```
 
 ## Replicate A vs Replicate B
 
-``` r
+```{r}
 cor_tbl2 <- cor_tbl %>% dplyr::filter(grepl("Rep.A", var1) ) %>%  dplyr::filter(grepl("Rep.B", var2) )
 
 corplot::get_corr_heat_box(cor_tbl2,var1 = var1, var2 = var2, value = corr) + 
   viridis::scale_fill_viridis() 
+
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+## Pairwise scatter plot 
 
-## Pairwise scatter plot
-
-``` r
+``` {r}
 groups_file <- expr_mat_file <- system.file("extdata" ,"example_data_01_sample_groups.txt" , package = "corplot")
 groups <- readr::read_delim(file = groups_file,delim = "\t") 
-#> Parsed with column specification:
-#> cols(
-#>   samples = col_character(),
-#>   condition = col_character(),
-#>   repl = col_character()
-#> )
 
 
 csp <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var_plot = condition, var_plot_group = repl,dat_id = gene_name)
@@ -79,11 +82,6 @@ cor_tbl2 <- cor_tbl %>% dplyr::rename(`Rep.A`=var1, `Rep.B` = var2) %>%
 
 csp + ggplot2::geom_text(data = cor_tbl2,  x = 3, y = 18, ggplot2::aes(label = paste("r","=",corr , sep = "")) , 
                          fontface="italic" , col = "red")
-```
-
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
-
-``` r
 
 
 
@@ -97,4 +95,11 @@ cor_mat <- expr_mat  %>%
   dplyr::group_by(condition) %>%
   dplyr::summarise(corr = cor(Rep.A, Rep.B)) %>% 
   dplyr:: mutate(corr = round(corr , 2))
+
+
 ```
+
+
+
+
+

@@ -4,29 +4,35 @@
 #' Prepare pairwise scatter plot input data
 #' @description Typical gene expression data stored in a tabular format, where rows are genes/features and columns are conditions/samples.
 #' Except first column, which belongs to feature name, value in each cell correspond to expression magnitude of a respective feature.
-#' Most gene expression data are produced in multiple replicate sets. Pairwise scatter plot is commnly used approach to check the quality of replicates.
+#' Most gene expression data are produced in multiple replicate sets. Pairwise scatter plot is commonly used approach to check the quality of replicates.
 #' Given the gene expression data as mentioned above along with sample groups, this function helps users to generate input data for pairwise scatter plot.
-#' @param dat_tbl a tbl for which pairwise scatter plot to be generate.
+#' @param dat_tbl a tbl for which pairwise scatter plot to be generate. Rows congaing NA will be removed.
 #' @param group_tbl a tbl containing sample groups. Refer details for more information on groups.
 #' @param var_plot a variable name, which is to be plotted.
 #' @param var_plot_group a variable name, which is to be used to group the variable \code{var_plot}
 #' @param dat_id a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.
-#'
+#' @importFrom rlang enquo quo sym quo_name
+#' @importFrom glue glue
+#' @importFrom dplyr pull left_join filter mutate select rename
+#' @importFrom tidyr gather spread complete
+#' @importFrom purrr map
+#' @importFrom TidyWrappers tbl_remove_rows_NA_any
+#' @importFrom ggplot2 ggplot geom_point aes facet_grid vars theme_bw theme element_text
 #' @return a tbl, which can be used to generate pairwise scatter plot.
 #'
 #'
 get_pairwise_scatter_data <- function(dat_tbl , group_tbl , var_plot, var_plot_group, dat_id){
 
   # dat_tbl <- dat
-  # group_tbl <- groups
-  # var_plot <- rlang::quo(tp)
-  # var_plot_group <- rlang::quo(repl)
-  # dat_id <- rlang::quo(genes)
-
+  # group_tbl <- groups2
+  # var_plot = rlang::quo(cond)
+  # var_plot_group = rlang::quo(repl)
+  # dat_id = rlang::quo(gene_name)
 
   var_plot <- rlang::enquo(var_plot)
   var_plot_group <- rlang::enquo(var_plot_group)
   dat_id <- rlang::enquo(dat_id)
+
   column_group_name  <-  rlang::quo(!!rlang::sym(colnames(group_tbl)[1]))
 
   ## input validations
@@ -51,12 +57,25 @@ get_pairwise_scatter_data <- function(dat_tbl , group_tbl , var_plot, var_plot_g
     stop(glue::glue("all candidates of `group_tbl` first column must present in `dat_tbl`") )
   }
 
+  ## remove NA rows from input matrix
+  dat_tbl <- dat_tbl %>% TidyWrappers::tbl_remove_rows_NA_any()
+  group_tbl <- group_tbl %>% TidyWrappers::tbl_remove_rows_NA_any()
+
   ## long format
   dat_long <- dat_tbl  %>%
+    TidyWrappers::tbl_remove_rows_NA_any() %>%
     tidyr::gather(vars, value , - !!dat_id)
 
   ## add groups
-  dat_long_with_groups <- dat_long %>% dplyr::left_join(groups , by = c("vars" = rlang::quo_name(column_group_name)))
+  dat_long_with_groups <- dat_long %>%
+    dplyr::left_join(group_tbl , by = c("vars" = rlang::quo_name(column_group_name)))
+
+  ## Remove NA from long data
+  ## Logic: For a given column in dat_tbl if corresponding is not given group_tbl it will generate NA values in dat_long_with_groups matrix.
+  ## Removing this NA make sure that only group candidates will be in final scatter plot
+
+  dat_long_with_groups <- dat_long_with_groups  %>%
+    TidyWrappers::tbl_remove_rows_NA_any()
 
   ## group candidates
   group_candidates <- dat_long_with_groups %>% dplyr::pull(!!var_plot_group) %>% unique()
@@ -82,15 +101,18 @@ get_pairwise_scatter_data <- function(dat_tbl , group_tbl , var_plot, var_plot_g
     dplyr::left_join(dat_by_var_group[[1]] , c("key1" = "key" ))  %>%
     dplyr::left_join(dat_by_var_group[[2]] , c("key2" = "key" )) %>%
     dplyr::select(-key1, -key2) %>%
-    dplyr::rename( x.var = !!var_plot) %>%
-    dplyr::rename( y.var = combin_var )
+    dplyr::rename( !!names(dat_by_var_group)[1] := !!var_plot) %>%
+    dplyr::rename( !!names(dat_by_var_group)[2] := combin_var ) %>%
+    dplyr::rename(!!paste(names(dat_by_var_group)[1],"value",sep="_") := "value.x") %>%
+    dplyr::rename(!!paste(names(dat_by_var_group)[2] ,"value",sep="_") := "value.y")
+
 
 }
 
 
 
 #' Generate pairwise scatter plot
-#' @description Generates pairwise scatter plot. One of the application of this function is to generates scatter plots between pairs of 2 replicate
+#' @description Generates pairwise scatter plot. One of the application of this function is to generates scatter plots between samples having 2 replicates.
 #' @param dat_tbl a tbl for which pairwise scatter plot to be generate.
 #' @param group_tbl a tbl containing sample groups. Refer details for more information on groups.
 #' @param var_plot a variable name, which is to be plotted.
@@ -112,13 +134,33 @@ get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group
 
   plot_data <-  get_pairwise_scatter_data(dat_tbl = dat_tbl , group_tbl = group_tbl , var_plot = !!var_plot , var_plot_group = !!var_plot_group, dat_id = !!dat_id)
 
+  var_x <- rlang::sym(plot_data %>% colnames() %>% .[2])
+  var_y <- rlang::sym(plot_data %>% colnames() %>% .[3])
+  value_x <- rlang::sym(plot_data %>% colnames() %>% .[4])
+  value_y <- rlang::sym(plot_data %>% colnames() %>% .[5])
+
+
+  # if(cor_val){
+  #   cor_mat <- dat_tbl  %>%
+  #     tidyr::gather(key, value, -!!dat_id) %>%
+  #     dplyr::left_join(group_tbl , by = c("key" =  group_tbl %>% colnames()[1])) %>%
+  #     dplyr::select(1,3,4,5) %>%
+  #     tidyr::spread(!!var_plot,value) %>%
+  #     dplyr::group_by(!!var_plot_group) %>%
+  #     dplyr::summarise(corr = cor(Rep.A, Rep.B))
+  # }
+
   plot_data %>%
     TidyWrappers::tbl_remove_rows_NA_any() %>%
     ggplot2::ggplot() +
-    ggplot2::geom_point(ggplot2::aes(x = log2(value.x +1 ) , y = log2(value.y + 1))) +
-    ggplot2::facet_grid(rows = ggplot2::vars(x.var),cols =  ggplot2::vars(y.var)) +ggplot2:: theme_bw() +
+    ggplot2::geom_point(ggplot2::aes(x = !!value_x , y = !!value_y )) +
+    ggplot2::facet_grid(rows = ggplot2::vars(!!var_x),cols =  ggplot2::vars(!!var_y)) +ggplot2:: theme_bw() +
     ggplot2::theme(text = ggplot2::element_text(size = 20))
 
 }
 
-get_pair_wise_scatter(dat_tbl = dat, group_tbl = groups, var_plot = tp, var_plot_group = repl, dat_id = genes )
+
+
+
+
+
