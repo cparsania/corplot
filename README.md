@@ -72,7 +72,7 @@ groups <- readr::read_delim(file = groups_file,delim = "\t")
 
 csp <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var_plot = condition, var_plot_group = repl,dat_id = gene_name)
 
-print(csp )
+csp
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
@@ -89,17 +89,3 @@ csp + ggplot2::geom_text(data = cor_tbl2,  x = 3, y = 18, ggplot2::aes(label = p
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-2.png" width="100%" />
-
-``` r
-
-
-## add corr values 
-cor_mat <- expr_mat  %>%
-  tidyr::gather(key, value, -gene_name) %>%
-  dplyr::left_join(groups , by = c("key" =  groups %>% colnames() %>% .[1])) %>%
-  dplyr::select(1,3,4,5) %>%
-  tidyr::spread(repl,value) %>%
-  dplyr::group_by(condition) %>%
-  dplyr::summarise(corr = cor(Rep.A, Rep.B)) %>% 
-  dplyr:: mutate(corr = round(corr , 2))
-```
