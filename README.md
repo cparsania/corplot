@@ -26,18 +26,6 @@ if(require("devtools")){
 
 expr_mat_file <- system.file("extdata" ,"example_data_expr_mat_01.txt" , package = "corplot")
 expr_mat <- readr::read_delim(expr_mat_file , delim = "\t") 
-#> Parsed with column specification:
-#> cols(
-#>   gene_name = col_character(),
-#>   Control_Rep.A = col_double(),
-#>   Control_Rep.B = col_double(),
-#>   Treat1_Rep.A = col_double(),
-#>   Treat1_Rep.B = col_double(),
-#>   Treat2_Rep.A = col_double(),
-#>   Treat2_Rep.B = col_double(),
-#>   Treat3_Rep.A = col_double(),
-#>   Treat3_Rep.B = col_double()
-#> )
 cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name") 
 
 cp <- corplot::get_corr_heat_box(cor_tbl,var1 = var1, var2 = var2 ,value = corr) 
@@ -62,12 +50,6 @@ corplot::get_corr_heat_box(cor_tbl2,var1 = var1, var2 = var2, value = corr) +
 ``` r
 groups_file <- expr_mat_file <- system.file("extdata" ,"example_data_01_sample_groups.txt" , package = "corplot")
 groups <- readr::read_delim(file = groups_file,delim = "\t") 
-#> Parsed with column specification:
-#> cols(
-#>   samples = col_character(),
-#>   condition = col_character(),
-#>   repl = col_character()
-#> )
 
 
 csp <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var_plot = condition, var_plot_group = repl,dat_id = gene_name)
@@ -79,6 +61,8 @@ csp
 
 ``` r
 
+
+## Display corr value
 cor_tbl2 <- cor_tbl %>% dplyr::rename(`Rep.A`=var1, `Rep.B` = var2) %>% 
   dplyr::filter(grepl("Rep.A" ,`Rep.A`)) %>%
   dplyr::filter(grepl("Rep.B" ,`Rep.B`)) %>% 

@@ -10,8 +10,9 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  fig.height=8,
-  fig.width=8  
+  fig.height=5,
+  fig.width=5 ,
+  message = FALSE
 )
 ```
 
@@ -81,6 +82,8 @@ csp <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var
 
 csp
 
+
+## Display corr value
 cor_tbl2 <- cor_tbl %>% dplyr::rename(`Rep.A`=var1, `Rep.B` = var2) %>% 
   dplyr::filter(grepl("Rep.A" ,`Rep.A`)) %>%
   dplyr::filter(grepl("Rep.B" ,`Rep.B`)) %>% 
