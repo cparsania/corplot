@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  fig.height=8,
+  fig.width=8  
 )
 ```
 
@@ -24,6 +26,8 @@ library(magrittr)
 cat(
 #badger::badge_devel("cparsania/corplot" , color = "blue"),
 #badger::badge_lifecycle()
+  
+  
 )
 
 ```
@@ -45,11 +49,11 @@ if(require("devtools")){
 
 ## all vs all
 
-``` {r}
+```{r }
 
 expr_mat_file <- system.file("extdata" ,"example_data_expr_mat_01.txt" , package = "corplot")
 expr_mat <- readr::read_delim(expr_mat_file , delim = "\t") 
-cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name")
+cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name") 
 
 cp <- corplot::get_corr_heat_box(cor_tbl,var1 = var1, var2 = var2 ,value = corr) 
 cp + viridis::scale_fill_viridis() + ggplot2::theme(axis.text.x = ggplot2::element_text(angle=90))

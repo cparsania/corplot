@@ -38,7 +38,7 @@ expr_mat <- readr::read_delim(expr_mat_file , delim = "\t")
 #>   Treat3_Rep.A = col_double(),
 #>   Treat3_Rep.B = col_double()
 #> )
-cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name")
+cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name") 
 
 cp <- corplot::get_corr_heat_box(cor_tbl,var1 = var1, var2 = var2 ,value = corr) 
 cp + viridis::scale_fill_viridis() + ggplot2::theme(axis.text.x = ggplot2::element_text(angle=90))
