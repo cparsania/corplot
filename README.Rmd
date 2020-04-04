@@ -10,8 +10,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  fig.height=5,
-  fig.width=5 ,
+  fig.height=8,
+  fig.width=8 ,
   message = FALSE
 )
 ```
@@ -19,8 +19,7 @@ knitr::opts_chunk$set(
 ```{r , message=FALSE, echo=FALSE}
 library(magrittr)
 ```
-# corplot
-
+# corplot 
 <!-- badges: start -->
 
 ```{r , echo=FALSE , results='asis' , message=FALSE}
@@ -28,13 +27,12 @@ cat(
 #badger::badge_devel("cparsania/corplot" , color = "blue"),
 #badger::badge_lifecycle()
   
-  
 )
 
 ```
 <!-- badges: end -->
 
-## Install 
+### Install
 
 ```{r , eval=FALSE}
 if(require("devtools")){
