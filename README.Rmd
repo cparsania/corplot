@@ -32,7 +32,7 @@ cat(
 ```
 <!-- badges: end -->
 
-### Install
+## Install
 
 ```{r , eval=FALSE}
 if(require("devtools")){

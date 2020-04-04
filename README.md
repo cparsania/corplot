@@ -7,7 +7,7 @@
 
 <!-- badges: end -->
 
-### Install
+## Install
 
 ``` r
 if(require("devtools")){
