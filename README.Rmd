@@ -48,7 +48,7 @@ if(require("devtools")){
 
 ## All samples vs all samples
 
-```{r, fig.width=6,fig.height=4 }
+```{r, fig.width=6,fig.height=4}
 
 expr_mat_file <- system.file("extdata" ,"example_data_expr_mat_01.txt" , package = "corplot")
 expr_mat <- readr::read_delim(expr_mat_file , delim = "\t") 
@@ -65,11 +65,11 @@ cp + viridis::scale_fill_viridis() + ggplot2::theme(axis.text.x = ggplot2::eleme
 
 ```
 
-## Group by replicates
+## Group by replicate
 
 All samples vs all samples correlation heatbox has redundant samples on each axis. This makes plot less readable. Alternate way to overcome this is to plot samples of replicate 1 vs samples of replicate 2.    
 
-```{r, fig.width=6, fig.height=4}
+```{r, fig.width=5, fig.height=3}
 cor_tbl2 <- cor_tbl %>% dplyr::filter(grepl("Rep.A", var1) ) %>%  dplyr::filter(grepl("Rep.B", var2) )
 
 cor_tbl2
