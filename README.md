@@ -69,7 +69,7 @@ cp + viridis::scale_fill_viridis() + ggplot2::theme(axis.text.x = ggplot2::eleme
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
-## Group by replicate
+## Group by replicates
 
 All samples vs all samples correlation heatbox has redundant samples on
 each axis. This makes plot less readable. Alternate way to overcome this
