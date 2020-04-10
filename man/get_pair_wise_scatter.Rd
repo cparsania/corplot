@@ -4,7 +4,14 @@
 \alias{get_pair_wise_scatter}
 \title{Generate pairwise scatter plot}
 \usage{
-get_pair_wise_scatter(dat_tbl, group_tbl, var_plot, var_plot_group, dat_id)
+get_pair_wise_scatter(
+  dat_tbl,
+  group_tbl,
+  var_plot,
+  var_plot_group,
+  dat_id,
+  view_matrix = TRUE
+)
 }
 \arguments{
 \item{dat_tbl}{a tbl for which pairwise scatter plot to be generate.}
@@ -16,6 +23,8 @@ get_pair_wise_scatter(dat_tbl, group_tbl, var_plot, var_plot_group, dat_id)
 \item{var_plot_group}{a variable name, which is to be used to group the variable \code{var_plot}}
 
 \item{dat_id}{a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.}
+
+\item{view_matrix}{logical, default TRUE, whether to display matrix view.}
 }
 \value{
 

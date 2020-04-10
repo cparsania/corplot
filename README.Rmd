@@ -46,53 +46,89 @@ if(require("devtools")){
 
 ## Correlation heatbox 
 
-## all vs all
+## All samples vs all samples
 
-```{r }
+```{r, fig.width=6,fig.height=4 }
 
 expr_mat_file <- system.file("extdata" ,"example_data_expr_mat_01.txt" , package = "corplot")
 expr_mat <- readr::read_delim(expr_mat_file , delim = "\t") 
-cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name") 
+
+expr_mat
+
+## calculate  pairwise correlation 
+cor_tbl <- corplot::get_pairwise_cor_tbl(expr_mat , var = "gene_name" , method = "pearson") 
+
+cor_tbl
 
 cp <- corplot::get_corr_heat_box(cor_tbl,var1 = var1, var2 = var2 ,value = corr) 
 cp + viridis::scale_fill_viridis() + ggplot2::theme(axis.text.x = ggplot2::element_text(angle=90))
 
 ```
 
-## Replicate A vs Replicate B
+## Group by replicates
 
-```{r}
+All samples vs all samples correlation heatbox has redundant samples on each axis. This makes plot less readable. Alternate way to overcome this is to plot samples of replicate 1 vs samples of replicate 2.    
+
+```{r, fig.width=6, fig.height=4}
 cor_tbl2 <- cor_tbl %>% dplyr::filter(grepl("Rep.A", var1) ) %>%  dplyr::filter(grepl("Rep.B", var2) )
+
+cor_tbl2
 
 corplot::get_corr_heat_box(cor_tbl2,var1 = var1, var2 = var2, value = corr) + 
   viridis::scale_fill_viridis() 
 
 ```
 
-## Pairwise scatter plot 
+## Scatter plot 
+
+## Group by replicates : All combinations 
 
 ``` {r}
 groups_file <- expr_mat_file <- system.file("extdata" ,"example_data_01_sample_groups.txt" , package = "corplot")
 groups <- readr::read_delim(file = groups_file,delim = "\t") 
 
+groups 
 
 csp <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var_plot = condition, var_plot_group = repl,dat_id = gene_name)
 
 csp
+```
 
+### Display corr value
 
-## Display corr value
+```{r}
+
 cor_tbl2 <- cor_tbl %>% dplyr::rename(`Rep.A`=var1, `Rep.B` = var2) %>% 
   dplyr::filter(grepl("Rep.A" ,`Rep.A`)) %>%
   dplyr::filter(grepl("Rep.B" ,`Rep.B`)) %>% 
   TidyWrappers::tbl_replace_string("_.*" , "")
 
-csp + ggplot2::geom_text(data = cor_tbl2,  x = 3, y = 18, ggplot2::aes(label = paste("r","=",corr , sep = "")) , 
-                         fontface="italic" , col = "red")
+cor_tbl2
 
+csp + ggplot2::geom_text(data = cor_tbl2,  x = 4, y = 18, ggplot2::aes(label = paste("r","=",corr , sep = "")) , 
+                         fontface="italic" , col = "red",size = 5)
 
 
 ```
+
+## Group by replicates : Only replicate pairs  
+```{r}
+csp2 <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var_plot = condition, var_plot_group = repl,dat_id = gene_name,view_matrix = FALSE)
+
+csp2
+```
+
+### Display corr value
+
+``` {r, fig.width = 5, fig.height = 5}
+cor_tbl3 <- cor_tbl2 %>% dplyr::filter(`Rep.A` == `Rep.B`) 
+csp3 <- corplot::get_pair_wise_scatter(dat_tbl = expr_mat, group_tbl = groups,var_plot = condition, var_plot_group = repl,dat_id = gene_name,view_matrix = FALSE)
+
+csp2 + ggplot2::geom_text(data = cor_tbl3,  x = 3, y = 18, ggplot2::aes(label = paste("r","=",corr , sep = "")) , 
+                         fontface="italic" , col = "red")
+
+```
+
 
 
 

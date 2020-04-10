@@ -113,18 +113,20 @@ get_pairwise_scatter_data <- function(dat_tbl , group_tbl , var_plot, var_plot_g
 
 #' Generate pairwise scatter plot
 #' @description Generates pairwise scatter plot. One of the application of this function is to generates scatter plots between samples having 2 replicates.
+#'
 #' @param dat_tbl a tbl for which pairwise scatter plot to be generate.
 #' @param group_tbl a tbl containing sample groups. Refer details for more information on groups.
 #' @param var_plot a variable name, which is to be plotted.
 #' @param var_plot_group a variable name, which is to be used to group the variable \code{var_plot}
 #' @param dat_id a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.
+#' @param view_matrix logical, default TRUE, whether to display matrix view.
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #'
-get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group, dat_id){
+get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group, dat_id , view_matrix =TRUE){
 
   group_tbl <- group_tbl
   dat_tbl <- dat_tbl
@@ -134,11 +136,15 @@ get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group
 
   plot_data <-  get_pairwise_scatter_data(dat_tbl = dat_tbl , group_tbl = group_tbl , var_plot = !!var_plot , var_plot_group = !!var_plot_group, dat_id = !!dat_id)
 
+
   var_x <- rlang::sym(plot_data %>% colnames() %>% .[2])
   var_y <- rlang::sym(plot_data %>% colnames() %>% .[3])
   value_x <- rlang::sym(plot_data %>% colnames() %>% .[4])
   value_y <- rlang::sym(plot_data %>% colnames() %>% .[5])
 
+  if(!view_matrix){
+    plot_data <- plot_data %>% dplyr::filter(!! var_x == !!var_y)
+  }
 
   # if(cor_val){
   #   cor_mat <- dat_tbl  %>%
@@ -150,12 +156,18 @@ get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group
   #     dplyr::summarise(corr = cor(Rep.A, Rep.B))
   # }
 
-  plot_data %>%
+  gp <- plot_data %>%
     TidyWrappers::tbl_remove_rows_NA_any() %>%
     ggplot2::ggplot() +
     ggplot2::geom_point(ggplot2::aes(x = !!value_x , y = !!value_y )) +
-    ggplot2::facet_grid(rows = ggplot2::vars(!!var_x),cols =  ggplot2::vars(!!var_y)) +ggplot2:: theme_bw() +
+    ggplot2:: theme_bw() +
     ggplot2::theme(text = ggplot2::element_text(size = 20))
+
+  if(view_matrix){
+    gp <- gp + ggplot2::facet_grid(rows = ggplot2::vars(!!var_x),cols =  ggplot2::vars(!!var_y) )
+  } else {
+    gp <- gp + ggplot2::facet_wrap(c(ggplot2::vars(!!var_y)))
+  }
 
 }
 
