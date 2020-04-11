@@ -5,7 +5,24 @@
 
 <!-- badges: start -->
 
+[![](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)](https://github.com/cparsania/corplot)
+[![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
+
+## Motivation
+
+Genomics data often stored in a matrix like format, where each row is a
+feature (gene, transcript, protein etc.) and column is a variable
+(e.g. expression value in RNA-seq, ChIP-seq, Pol-II ChIP-seq etc.).
+Variables are often grouped by replicates, time-point or specific
+experimental conditions such as wild type, delition, control, treatment
+etc. In such a multidimental data, plotting a x-y scatter plot between
+diffrent groups require lots of data wrangling before we input them for
+final ggplot.
+
+`corplot` has functions to generate heatbox and pairwise scatterplots
+directly from feature matix given in a tbl format. Let’s have a look
+into required input data and resultant plots outof `corpot`.
 
 ## Install
 
