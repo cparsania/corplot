@@ -27,11 +27,8 @@ get_pair_wise_scatter(
 \item{view_matrix}{logical, default TRUE, whether to display matrix view.}
 }
 \value{
-
+an object of ggplot2
 }
 \description{
 Generates pairwise scatter plot. One of the application of this function is to generates scatter plots between samples having 2 replicates.
-}
-\examples{
-
 }

@@ -6,10 +6,10 @@
 #' Except first column, which belongs to feature name, value in each cell correspond to expression magnitude of a respective feature.
 #' Most gene expression data are produced in multiple replicate sets. Pairwise scatter plot is commonly used approach to check the quality of replicates.
 #' Given the gene expression data as mentioned above along with sample groups, this function helps users to generate input data for pairwise scatter plot.
-#' @param dat_tbl a tbl for which pairwise scatter plot to be generate. Rows congaing NA will be removed.
+#' @param dat_tbl a tbl for which pairwise scatter plot to be generated. Rows congaing NA will be removed.
 #' @param group_tbl a tbl containing sample groups. Refer details for more information on groups.
-#' @param var_plot a variable name, which is to be plotted.
-#' @param var_plot_group a variable name, which is to be used to group the variable \code{var_plot}
+#' @param var_plot a variable name to be plotted.
+#' @param var_plot_group a variable name to be used to group the variable \code{var_plot}.
 #' @param dat_id a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.
 #' @importFrom rlang enquo quo sym quo_name
 #' @importFrom glue glue
@@ -19,7 +19,7 @@
 #' @importFrom TidyWrappers tbl_remove_rows_NA_any
 #' @importFrom ggplot2 ggplot geom_point aes facet_grid vars theme_bw theme element_text
 #' @return a tbl, which can be used to generate pairwise scatter plot.
-#'
+#' @details // TO DO
 #'
 get_pairwise_scatter_data <- function(dat_tbl , group_tbl , var_plot, var_plot_group, dat_id){
 
@@ -121,10 +121,9 @@ get_pairwise_scatter_data <- function(dat_tbl , group_tbl , var_plot, var_plot_g
 #' @param dat_id a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.
 #' @param view_matrix logical, default TRUE, whether to display matrix view.
 #'
-#' @return
+#' @return an object of ggplot2
 #' @export
 #'
-#' @examples
 #'
 get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group, dat_id , view_matrix =TRUE){
 

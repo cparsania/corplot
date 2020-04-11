@@ -7,13 +7,13 @@
 get_pairwise_scatter_data(dat_tbl, group_tbl, var_plot, var_plot_group, dat_id)
 }
 \arguments{
-\item{dat_tbl}{a tbl for which pairwise scatter plot to be generate. Rows congaing NA will be removed.}
+\item{dat_tbl}{a tbl for which pairwise scatter plot to be generated. Rows congaing NA will be removed.}
 
 \item{group_tbl}{a tbl containing sample groups. Refer details for more information on groups.}
 
-\item{var_plot}{a variable name, which is to be plotted.}
+\item{var_plot}{a variable name to be plotted.}
 
-\item{var_plot_group}{a variable name, which is to be used to group the variable \code{var_plot}}
+\item{var_plot_group}{a variable name to be used to group the variable \code{var_plot}.}
 
 \item{dat_id}{a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.}
 }
@@ -25,4 +25,7 @@ Typical gene expression data stored in a tabular format, where rows are genes/fe
 Except first column, which belongs to feature name, value in each cell correspond to expression magnitude of a respective feature.
 Most gene expression data are produced in multiple replicate sets. Pairwise scatter plot is commonly used approach to check the quality of replicates.
 Given the gene expression data as mentioned above along with sample groups, this function helps users to generate input data for pairwise scatter plot.
+}
+\details{
+// TO DO
 }
