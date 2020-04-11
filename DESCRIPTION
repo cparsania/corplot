@@ -19,3 +19,5 @@ Imports:
     TidyWrappers (>= 0.0.1.9),
     glue (>= 1.3.2),
     purrr (>= 0.3.3)
+BugReports: https://github.com/cparsania/corplot/issues
+URL: https://github.com/cparsania/corplot
