@@ -12,17 +12,17 @@
 ## Motivation
 
 Genomics data often stored in a matrix like format, where each row is a
-feature (gene, transcript, protein etc.) and column is a variable
-(e.g. expression value in RNA-seq, ChIP-seq, Pol-II ChIP-seq etc.).
-Variables are often grouped by replicates, time-point or specific
-experimental conditions such as wild type, delition, control, treatment
-etc. In such a multidimental data, plotting a x-y scatter plot between
-diffrent groups require lots of data wrangling before we input them for
-final ggplot.
+feature (gene, transcript, protein etc.) and columns are variables
+(e.g. signal intensity of experiments such as RNA-seq, ChIP-seq, Pol-II
+ChIP-seq etc.). Variables are often grouped by replicates, time-points
+or specific experimental conditions such as wild type, deletion,
+control, treatment etc. In such a multidimensional data, plotting a x-y
+scatter plot between different groups require lots of data wrangling
+before it goes for final ggplot.
 
-`corplot` has functions to generate heatbox and pairwise scatterplots
-directly from feature matix given in a tbl format. Let’s have a look
-into required input data and resultant plots outof `corpot`.
+`corplot` has functions to generate heatbox and pairwise scatter plots
+directly from feature matrix given in a tbl format. Let’s have a look
+into required input data and resultant plots out of `corpot`.
 
 ## Install
 
