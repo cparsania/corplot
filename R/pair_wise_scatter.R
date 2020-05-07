@@ -120,12 +120,12 @@ get_pairwise_scatter_data <- function(dat_tbl , group_tbl , var_plot, var_plot_g
 #' @param var_plot_group a variable name, which is to be used to group the variable \code{var_plot}
 #' @param dat_id a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.
 #' @param view_matrix logical, default TRUE, whether to display matrix view.
-#'
+#' @param ... other parameters pass on to ggplot2::geom_point()
 #' @return an object of ggplot2
 #' @export
 #'
 #'
-get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group, dat_id , view_matrix =TRUE){
+get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group, dat_id , view_matrix =TRUE,...){
 
   group_tbl <- group_tbl
   dat_tbl <- dat_tbl
@@ -158,7 +158,7 @@ get_pair_wise_scatter <- function(dat_tbl , group_tbl , var_plot, var_plot_group
   gp <- plot_data %>%
     TidyWrappers::tbl_remove_rows_NA_any() %>%
     ggplot2::ggplot() +
-    ggplot2::geom_point(ggplot2::aes(x = !!value_x , y = !!value_y )) +
+    ggplot2::geom_point(ggplot2::aes(x = !!value_x , y = !!value_y ),...) +
     ggplot2:: theme_bw() +
     ggplot2::theme(text = ggplot2::element_text(size = 20))
 
