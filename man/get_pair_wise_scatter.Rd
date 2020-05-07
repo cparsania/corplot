@@ -10,7 +10,8 @@ get_pair_wise_scatter(
   var_plot,
   var_plot_group,
   dat_id,
-  view_matrix = TRUE
+  view_matrix = TRUE,
+  ...
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ get_pair_wise_scatter(
 \item{dat_id}{a variable name from tbl \code{dat_tbl} storing feature ids. Typically name of first column form \code{dat_tbl}.}
 
 \item{view_matrix}{logical, default TRUE, whether to display matrix view.}
+
+\item{...}{other parameters pass on to ggplot2::geom_point()}
 }
 \value{
 an object of ggplot2
